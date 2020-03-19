@@ -1,25 +1,28 @@
 #1.使用yml文件有层级结构 缩进
 #2.使用yml文件key value 之间使用 :号连接
 #3.赋值时:号后边必须加空格
-server:
-  port: 8090
-  servlet:
-    context-path: /
-    #引入数据源配置
+#=== 配置文件 ====
 spring:
-  datasource:
-    #引入druid数据源
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/mysql?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
-    username: root
-    password: root
-
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
   #配置mvc页面
   mvc:
     view:
       prefix: /WEB-INF/
       suffix: .jsp
+#  data:
+#    redis:
+#      repositories:
+#        enabled: false
+
+# === JPA配置 ====
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: true
 
 #mybatis-plush配置
 mybatis-plus:
