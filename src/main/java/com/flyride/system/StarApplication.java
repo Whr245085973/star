@@ -1,4 +1,4 @@
-package com.flyride.star;
+package com.flyride.system;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

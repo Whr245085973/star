@@ -1,7 +1,7 @@
-package com.flyride.star.controller;
+package com.flyride.system.controller;
 
-import com.flyride.star.dto.Person;
-import com.flyride.star.repository.PersonRepository;
+import com.flyride.system.model.Person;
+import com.flyride.system.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,6 @@
-package com.flyride.star.repository;
+package com.flyride.system.repository;
 
-import com.flyride.star.dto.Person;
+import com.flyride.system.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

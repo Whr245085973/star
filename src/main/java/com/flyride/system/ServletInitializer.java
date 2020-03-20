@@ -1,4 +1,4 @@
-package com.flyride.star;
+package com.flyride.system;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
