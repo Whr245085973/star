@@ -44,15 +44,23 @@ spring:
     timeout: 5000
 
 
-#mybatis-plush配置
-mybatis-plus:
-  #配置别名包
-  type-aliases-package: com.jt.pojo
-  #配置mapper映射
-  mapper-locations: classpath:/mybatis/mappers/*.xml
-  #开启驼峰映射
+#=================Mybatis配置=========================
+# 别名配置
+mybatis:
   configuration:
     map-underscore-to-camel-case: true
+  # xml扫描位置mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+
+#mybatis-plush配置
+#mybatis-plus:
+#  #配置别名包
+#  type-aliases-package: com.jt.pojo
+#  #配置mapper映射
+#  mapper-locations: classpath:/mybatis/mappers/*.xml
+#  #开启驼峰映射
+#  configuration:
+#    map-underscore-to-camel-case: true
 
 #添加日志输出
 logging:

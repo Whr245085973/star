@@ -2,13 +2,7 @@ package com.flyride.system.service;
 
 import java.util.Map;
 
-/**
- * @description:
- * @param null 
- * @return 
- * @author Mr.Wu
- * @date 2020/3/20 13:49
- */
+
 public interface RedisService {
 
     // 加入元素
