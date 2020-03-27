@@ -6,6 +6,7 @@ import com.flyride.system.utils.JwtUtils;
 import com.flyride.system.modules.system.model.SysMenuDO;
 import com.flyride.system.modules.system.service.SysMenuDOService;
 import com.flyride.system.modules.system.service.SysUserDOService;
+import com.flyride.system.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Created by L.C.Y on 2018-11-26
@@ -72,8 +75,10 @@ public class ShiroRealm extends AuthorizingRealm {
             perms = sysUserDOService.listStringPermsByUserId(userId);
         }
 
+        Set<String> permList = perms.stream().filter(perm -> !StringUtils.isBlank(perm)).collect(Collectors.toSet());
+
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.addStringPermissions(perms);
+        authorizationInfo.addStringPermissions(permList);
         return authorizationInfo;
     }
 

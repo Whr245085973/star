@@ -12,25 +12,75 @@
   <sql id="Base_Column_List">
     user_id, username, password, status, gmt_create, gmt_modified
   </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+    select user_id, username, status, gmt_create
     from sys_user
     where user_id = #{userId,jdbcType=BIGINT}
   </select>
+
+  <!--根据用户名查询密码-->
+  <select id="getUserByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select user_id, username, password, status, gmt_create
+    from sys_user
+    where username = #{username}
+  </select>
+
+  <!--查询用户所有的角色Id-->
+  <select id="listRoleIdByUserId" parameterType="java.lang.Long" resultType="Integer">
+    select role_id
+    from sys_user_role
+    where user_id = #{userId}
+  </select>
+
+  <!--查询用户所有的权限-->
+  <select id="listStringPermsByUserId" parameterType="java.lang.Long" resultType="String">
+    select menu.perms
+    from sys_menu menu
+    join sys_menu_role mr on menu.menu_id = mr.menu_id
+    join sys_user_role ur on mr.role_id = ur.role_id
+    where ur.user_id = #{userId}
+  </select>
+
+  <!--查询用户所有的菜单-->
+  <select id="listStringMenuByUserId" parameterType="java.lang.Long" resultType="String">
+    select menu.parent_menu
+    from sys_menu menu
+    join sys_menu_role mr on menu.menu_id = mr.menu_id
+    join sys_user_role ur on mr.role_id = ur.role_id
+    where ur.user_id = #{userId}
+  </select>
+
+  <!--列表,可根据用户名和状态查询-->
+  <select id="listSysUser" parameterType="com.flyride.system.modules.system.model.SysUserDO" resultMap="BaseResultMap">
+    select user_id, username, status, gmt_create
+    from sys_user
+    where 1=1
+    <if test="username != null">
+      and username LIKE CONCAT('%', #{username}, '%')
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from sys_user
     where user_id = #{userId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.flyride.system.modules.system.model.SysUserDO">
-    insert into sys_user (user_id, username, password, 
-      status, gmt_create, gmt_modified
-      )
-    values (#{userId,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{status,jdbcType=TINYINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
-      )
+
+  <!--删除用户角色关联表-->
+  <delete id="deleteUserRoleByUserId" parameterType="java.lang.Long">
+    delete from sys_user_role
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+
+  <!--插入用户角色关联表-->
+  <insert id="insertUserRole" parameterType="com.flyride.system.modules.system.model.SysUserDO">
+    insert into sys_user_role(user_id, role_id) values (#{userId}, #{roleId})
   </insert>
-  <insert id="insertSelective" parameterType="com.flyride.system.modules.system.model.SysUserDO">
+
+  <insert id="insertSelective" keyProperty="userId"  useGeneratedKeys="true" parameterType="com.flyride.system.modules.system.model.SysUserDO">
     insert into sys_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -73,6 +123,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.flyride.system.modules.system.model.SysUserDO">
     update sys_user
     <set>
@@ -92,15 +143,6 @@
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where user_id = #{userId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.flyride.system.modules.system.model.SysUserDO">
-    update sys_user
-    set username = #{username,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
 </mapper>

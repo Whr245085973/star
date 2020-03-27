@@ -9,27 +9,64 @@
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
+
   <sql id="Base_Column_List">
     menu_id, menu_name, parent_menu, perms, gmt_create, gmt_modified
   </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from sys_menu
     where menu_id = #{menuId,jdbcType=INTEGER}
   </select>
+
+  <!--根据菜单名查询-->
+  <select id="getMenuByMenuName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select menu_id, menu_name, parent_menu, perms, gmt_create
+    from sys_menu
+    where menu_name LIKE CONCAT('%', #{menuName}, '%')
+  </select>
+
+  <!--菜单权限列表，不分页, 可根据菜单名查询-->
+  <select id="listMenu" parameterType="com.flyride.system.modules.system.model.SysMenuDO" resultMap="BaseResultMap">
+    select menu_id, menu_name, parent_menu, perms, gmt_create
+    from sys_menu
+    where 1=1
+    <if test="menuName != null">
+      and menu_name LIKE CONCAT('%', #{menuName}, '%')
+    </if>
+    ORDER BY perms DESC
+  </select>
+
+  <!--根据角色Id查询该角色的菜单列表-->
+  <select id="listMenuByRoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select menu.menu_id, menu.menu_name, menu.parent_menu, menu.perms
+    from sys_menu menu
+    join sys_menu_role rm on menu.menu_id = rm.menu_id
+    where rm.role_id = #{roleId}
+  </select>
+
+  <!--查询用户所有的菜单-->
+  <select id="listMenuByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select menu.menu_id, menu.menu_name, menu.parent_menu, menu.perms
+    from sys_menu menu
+    join sys_menu_role mr on menu.menu_id = mr.menu_id
+    join sys_user_role ur on mr.role_id = ur.role_id
+    where ur.user_id = #{userId}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from sys_menu
     where menu_id = #{menuId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.flyride.system.modules.system.model.SysMenuDO">
-    insert into sys_menu (menu_id, menu_name, parent_menu, 
-      perms, gmt_create, gmt_modified
-      )
-    values (#{menuId,jdbcType=INTEGER}, #{menuName,jdbcType=VARCHAR}, #{parentMenu,jdbcType=VARCHAR}, 
-      #{perms,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
-      )
-  </insert>
+
+  <!--删除关联的角色-->
+  <delete id="deleteMenuRoleByMenuId" parameterType="java.lang.Integer">
+    delete from sys_menu_role
+    where menu_id = #{menuId,jdbcType=INTEGER}
+  </delete>
+
   <insert id="insertSelective" parameterType="com.flyride.system.modules.system.model.SysMenuDO">
     insert into sys_menu
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -73,6 +110,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.flyride.system.modules.system.model.SysMenuDO">
     update sys_menu
     <set>
@@ -92,15 +130,6 @@
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where menu_id = #{menuId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.flyride.system.modules.system.model.SysMenuDO">
-    update sys_menu
-    set menu_name = #{menuName,jdbcType=VARCHAR},
-      parent_menu = #{parentMenu,jdbcType=VARCHAR},
-      perms = #{perms,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where menu_id = #{menuId,jdbcType=INTEGER}
   </update>
 </mapper>
