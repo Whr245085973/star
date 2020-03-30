@@ -83,7 +83,7 @@ public class LoginController {
         Set<Integer> roleIdList = sysUserDOService.listRoleIdByUserId(user.getUserId());
 
         List<MenuTreeEntity> menuTree;
-        Set<String> perms = new HashSet<>();;
+        Set<String> perms = new HashSet<>();
 
         // 超级管理员有所有权限及菜单
         if (roleIdList.contains(SUPER_ADMIN)) {

@@ -16,7 +16,7 @@ import java.util.Map;
  * @author Created by L.C.Y on 2018-11-26
  */
 public class JwtUtils {
-    private static final String SIGN_KEY = "com.lltech.htsdk.@author.L.C.Y";
+    private static final String SIGN_KEY = "com.flyride.system.@author.W.H.R";
     private static final byte[] SIGNING_KEY_BYTES = DatatypeConverter.parseBase64Binary(SIGN_KEY);
 
     private JwtUtils(){}

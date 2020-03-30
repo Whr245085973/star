@@ -2,8 +2,6 @@ package com.flyride.system.config.shiro;
 
 import com.flyride.system.modules.system.model.SysMenuDO;
 import com.flyride.system.utils.JwtUtils;
-import com.flyride.system.utils.JwtUtils;
-import com.flyride.system.modules.system.model.SysMenuDO;
 import com.flyride.system.modules.system.service.SysMenuDOService;
 import com.flyride.system.modules.system.service.SysUserDOService;
 import com.flyride.system.utils.StringUtils;
@@ -20,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Created by L.C.Y on 2018-11-26
