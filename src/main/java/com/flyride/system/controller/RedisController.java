@@ -1,5 +1,6 @@
 package com.flyride.system.controller;
 
+import com.flyride.system.logging.annotation.Log;
 import com.flyride.system.service.RedisService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class RedisController {
      */
     @PostMapping(path = "saveToken")
     @RequiresPermissions("center_ltv_list")
+    @Log(value = "保存数据至Redis")
     public Object saveToken(String name){
         redisService.setValue("1",name);
         Object value = redisService.getValue("1");

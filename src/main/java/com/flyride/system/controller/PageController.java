@@ -1,5 +1,6 @@
 package com.flyride.system.controller;
 
+import com.flyride.system.logging.annotation.Log;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ public class PageController {
 
     @RequestMapping("/{page}")
     @RequiresPermissions("center_ltv_list")
+    @Log(value = "page")
     public String getPage(@PathVariable String page){
         return page;
     }
